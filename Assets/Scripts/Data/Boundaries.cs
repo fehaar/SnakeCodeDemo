@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// The boundaries define the size of the play area
+/// </summary>
 public class Boundaries
 {
     public Boundaries(Bounds bounds)
@@ -11,8 +14,11 @@ public class Boundaries
 
     internal Vector3 Size => bounds.size;
 
-    internal bool IsInside(Vector2 position)
+    internal void KillSnakeOutsideArea(Snake snake)
     {
-        return bounds.Contains(position);
+        if (!bounds.Contains(snake.Position))
+        {
+            snake.Kill();
+        }
     }
 }

@@ -34,6 +34,8 @@ public class Snake
     /// </summary>
     public float Length { get; private set; } = 20f;
 
+    public bool IsDead { get; private set; } = false;
+
     /// <summary>
     /// Which way is the snake moving?
     /// </summary>
@@ -93,5 +95,10 @@ public class Snake
         }
 
         CurrentDirection = moveDirection;
+    }
+
+    internal void Kill()
+    {
+        IsDead = true;
     }
 }

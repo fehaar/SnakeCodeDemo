@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Show the boundaries of the play area
+/// </summary>
 public class BoundariesView : MonoBehaviour
 {
     private Snake snake;
@@ -14,10 +17,6 @@ public class BoundariesView : MonoBehaviour
 
     private void Update()
     {
-        // Check if the snake is inside the boundaries, otherwise kill it
-        if (!boundaries.IsInside(snake.Position))
-        {
-            
-        }
+        boundaries.KillSnakeOutsideArea(snake);
     }
 }

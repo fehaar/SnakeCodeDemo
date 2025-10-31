@@ -8,7 +8,6 @@ public class SnakeView : MonoBehaviour
 {
     private Snake snake;
     private LineRenderer line;
-    private bool isDead = false;
 
     const float COLLISION_DISTANCE = 0.5f;
 
@@ -45,7 +44,7 @@ public class SnakeView : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isDead)
+        if (snake.IsDead)
         {
             return;
         }
@@ -79,7 +78,7 @@ public class SnakeView : MonoBehaviour
                     {
                         if (snake.Position.y < Math.Max(first.y, second.y) && snake.Position.y > Math.Min(first.y, second.y))
                         {
-                            isDead = true;
+                            snake.Kill();
                         }
                     }
                 }
@@ -90,7 +89,7 @@ public class SnakeView : MonoBehaviour
                     {
                         if (snake.Position.x < Math.Max(first.x, second.x) && snake.Position.x > Math.Min(first.x, second.x))
                         {
-                            isDead = true;
+                            snake.Kill();
                         }
                     }
                 }
@@ -196,7 +195,7 @@ public class SnakeView : MonoBehaviour
     private void Turn(Snake.MoveDirection moveDirection)
     {
         // If we are dead, we will not turn the snake
-        if (isDead)
+        if (snake.IsDead)
         {
             return;
         }
