@@ -9,6 +9,10 @@ public class SnakeView : MonoBehaviour
     private Snake snake;
     private LineRenderer line;
 
+    // Array caches for positioning so we don't always have to make new ones
+    private Vector3[] oldPositions = Array.Empty<Vector3>();
+    private Vector3[] newPositions = Array.Empty<Vector3>();
+
     public void Initialize(Snake snake)
     {
         this.snake = snake;
@@ -94,11 +98,17 @@ public class SnakeView : MonoBehaviour
                 if (segmentsToRemove > 0)
                 {
                     // Do the segment removal in one array copy
-                    // TODO: We could optimize this by not making new arrays if they are of the same length
-                    var oldPositions = new Vector3[line.positionCount];
+                    if (oldPositions.Length != line.positionCount)
+                    {
+                        oldPositions = new Vector3[line.positionCount];
+                    }
                     line.GetPositions(oldPositions);
-                    var newPositions = new Vector3[line.positionCount - segmentsToRemove];
-                    Array.Copy(oldPositions, segmentsToRemove, newPositions, 0, newPositions.Length);
+                    var newLength = line.positionCount - segmentsToRemove;
+                    if (newPositions.Length != newLength)
+                    {
+                        newPositions = new Vector3[newLength];
+                    }
+                    Array.Copy(oldPositions, segmentsToRemove, newPositions, 0, newLength);
                     line.positionCount = newPositions.Length;
                     line.SetPositions(newPositions);
                 }
