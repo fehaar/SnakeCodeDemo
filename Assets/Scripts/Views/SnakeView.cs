@@ -31,9 +31,18 @@ public class SnakeView : MonoBehaviour
         line.SetPosition(line.positionCount - 1, new Vector3(snake.Position.x, snake.Position.y, 0));
 
         // Cull the tail of the snake by looking at it from the head 
+        AdjustTailLength();
+    }
+
+    /// <summary>
+    /// Since the history of the snake is only held in the line renderer, we will have to do correction of the snake directly in the points of the renderer
+    /// </summary>
+    private void AdjustTailLength()
+    {
         var lineLength = 0f;
         for (int i = line.positionCount - 1; i >= 1; i--)
         {
+            // Sum up the length of the snake
             var first = line.GetPosition(i);
             var second = line.GetPosition(i - 1);
             var segmentLength = 0f;
@@ -43,7 +52,7 @@ public class SnakeView : MonoBehaviour
             {
                 // We are too long and need to move our tail a bit
                 // We start from the back and see how much to cut off
-                var cullSegments = 0;
+                var segmentsToRemove = 0;
                 for (int j = 0; j < line.positionCount - 1; j++)
                 {
                     first = line.GetPosition(j);
@@ -52,7 +61,7 @@ public class SnakeView : MonoBehaviour
                     if (lengthDifference > segmentLength)
                     {
                         // We need to cull a segment and then proceed with shortening
-                        cullSegments++;
+                        segmentsToRemove++;
                         lengthDifference -= segmentLength;
                     }
                     else
@@ -82,12 +91,14 @@ public class SnakeView : MonoBehaviour
                         break;
                     }
                 }
-                if (cullSegments > 0)
+                if (segmentsToRemove > 0)
                 {
+                    // Do the segment removal in one array copy
+                    // TODO: We could optimize this by not making new arrays if they are of the same length
                     var oldPositions = new Vector3[line.positionCount];
                     line.GetPositions(oldPositions);
-                    var newPositions = new Vector3[line.positionCount - cullSegments];
-                    Array.Copy(oldPositions, cullSegments, newPositions, 0, newPositions.Length);
+                    var newPositions = new Vector3[line.positionCount - segmentsToRemove];
+                    Array.Copy(oldPositions, segmentsToRemove, newPositions, 0, newPositions.Length);
                     line.positionCount = newPositions.Length;
                     line.SetPositions(newPositions);
                 }
