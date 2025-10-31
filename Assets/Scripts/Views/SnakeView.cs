@@ -8,6 +8,7 @@ public class SnakeView : MonoBehaviour
 {
     private Snake snake;
     private LineRenderer line;
+    private Rigidbody2D body;
 
     const float COLLISION_DISTANCE = 0.5f;
 
@@ -20,6 +21,7 @@ public class SnakeView : MonoBehaviour
         this.snake = snake;
         this.line = GetComponent<LineRenderer>();
         inputAction.performed += InputAction_performed;
+        this.body = GetComponent<Rigidbody2D>();
     }
 
     private void InputAction_performed(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -54,6 +56,7 @@ public class SnakeView : MonoBehaviour
 
         // Update the visual representation
         line.SetPosition(line.positionCount - 1, new Vector3(snake.Position.x, snake.Position.y, 0));
+        body.MovePosition(snake.Position);
 
         // Cull the tail of the snake by looking at it from the head 
         AdjustTailLength();
@@ -202,5 +205,10 @@ public class SnakeView : MonoBehaviour
         // We will add in a new segment of the line when we turn. It will get positioned next tick.
         line.positionCount++;        
         snake.Turn(moveDirection);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("Trigger!");
     }
 }
