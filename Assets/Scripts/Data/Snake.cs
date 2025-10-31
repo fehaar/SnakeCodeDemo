@@ -60,6 +60,37 @@ public class Snake
 
     internal void Turn(MoveDirection moveDirection)
     {
+        // Make sure that we don't move backwards
+        switch (CurrentDirection)
+        {
+            case MoveDirection.Up:
+                if (moveDirection == MoveDirection.Down)
+                {
+                    return;
+                }
+                break;
+            case MoveDirection.Down:
+                if (moveDirection == MoveDirection.Up) 
+                { 
+                    return; 
+                }
+                break;
+            case MoveDirection.Left:
+                if (moveDirection == MoveDirection.Right)
+                {
+                    return;
+                }
+                break;
+            case MoveDirection.Right:
+                if (moveDirection == MoveDirection.Left)
+                {
+                    return;
+                }
+                break;
+            default:
+                break;
+        }
+
         CurrentDirection = moveDirection;
     }
 }
