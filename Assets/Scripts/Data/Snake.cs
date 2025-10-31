@@ -29,6 +29,11 @@ public class Snake
     public float Speed { get; private set; } = 1f;
 
     /// <summary>
+    /// How long is the snake
+    /// </summary>
+    public float Length { get; private set; } = 30f;
+
+    /// <summary>
     /// Which way is the snake moving?
     /// </summary>
     public MoveDirection CurrentDirection { get; set; } = MoveDirection.Right;
