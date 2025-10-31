@@ -181,7 +181,12 @@ public class SnakeView : MonoBehaviour
 
     internal void Turn(Snake.MoveDirection moveDirection)
     {
-        // We will add in a new segment of the line when we turn
+        // If we are dead, we will not turn the snake
+        if (isDead)
+        {
+            return;
+        }
+        // We will add in a new segment of the line when we turn. It will get positioned next tick.
         line.positionCount++;        
         snake.Turn(moveDirection);
     }
