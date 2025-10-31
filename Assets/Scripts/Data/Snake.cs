@@ -2,6 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// This is the data representation of a Snake in the game.
+/// The snake only knows of its head and how to move that.
 /// </summary>
 public class Snake
 {

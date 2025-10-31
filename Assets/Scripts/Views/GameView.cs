@@ -20,21 +20,6 @@ public class GameView : MonoBehaviour
     void Start()
     {
         snakeView = Instantiate(snakePrefab);
-        snakeView.Initialize(new Snake(snakeStartingSpeed));
-
-        movement.ToInputAction().performed += PlayerMovement_Performed;
-    }
-
-    private void PlayerMovement_Performed(InputAction.CallbackContext context)
-    {
-        var moveValue = context.ReadValue<Vector2>();
-        if (moveValue.x != 0) 
-        {
-            snakeView.Turn(moveValue.x > 0 ? Snake.MoveDirection.Right : Snake.MoveDirection.Left);
-        }
-        else 
-        {
-            snakeView.Turn(moveValue.y > 0 ? Snake.MoveDirection.Up : Snake.MoveDirection.Down);
-        }
+        snakeView.Initialize(new Snake(snakeStartingSpeed), movement.ToInputAction());
     }
 }

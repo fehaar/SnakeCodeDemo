@@ -16,13 +16,27 @@ public class SnakeView : MonoBehaviour
     private Vector3[] oldPositions = Array.Empty<Vector3>();
     private Vector3[] newPositions = Array.Empty<Vector3>();
 
-    public void Initialize(Snake snake)
+    public void Initialize(Snake snake, UnityEngine.InputSystem.InputAction inputAction)
     {
         this.snake = snake;
         this.line = GetComponent<LineRenderer>();
+        inputAction.performed += InputAction_performed;
     }
 
-    void Start()
+    private void InputAction_performed(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        var moveValue = context.ReadValue<Vector2>();
+        if (moveValue.x != 0)
+        {
+            Turn(moveValue.x > 0 ? Snake.MoveDirection.Right : Snake.MoveDirection.Left);
+        }
+        else
+        {
+            Turn(moveValue.y > 0 ? Snake.MoveDirection.Up : Snake.MoveDirection.Down);
+        }
+    }
+
+void Start()
     {
         line.SetPosition(0, new Vector3(snake.Position.x, snake.Position.y, 0));
         line.SetPosition(1, new Vector3(snake.Position.x, snake.Position.y, 0));
@@ -179,7 +193,7 @@ public class SnakeView : MonoBehaviour
         }
     }
 
-    internal void Turn(Snake.MoveDirection moveDirection)
+    private void Turn(Snake.MoveDirection moveDirection)
     {
         // If we are dead, we will not turn the snake
         if (isDead)
