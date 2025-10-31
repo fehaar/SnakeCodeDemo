@@ -23,7 +23,7 @@ public class FoodAreaView : MonoBehaviour
         if (food != null)
         {
             var foodView = Instantiate(foodPrefab, transform);
-            foodView.Initalize(food);
+            foodView.Initalize(foodArea, food);
         }
     }
 }

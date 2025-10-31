@@ -209,6 +209,8 @@ public class SnakeView : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Trigger!");
+        var food = collision.gameObject.GetComponentInParent<FoodView>();
+        food.Eat();
+        snake.Eat(food);
     }
 }

@@ -43,4 +43,9 @@ public class FoodArea
         }
         return null;
     }
+
+    internal void Eat(Food food)
+    {
+        availableFood.Remove(food);
+    }
 }

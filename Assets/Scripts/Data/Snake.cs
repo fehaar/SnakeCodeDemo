@@ -101,4 +101,10 @@ public class Snake
     {
         IsDead = true;
     }
+
+    internal void Eat(FoodView food)
+    {
+        Length += 20;
+        Speed += 1f;
+    }
 }
