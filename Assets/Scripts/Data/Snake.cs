@@ -22,11 +22,15 @@ public class Snake
     /// Where is the head of the snake located?
     /// </summary>
     public Vector2 Position { get; private set; }
+
     /// <summary>
-    /// Which way is the snake moving?
+    /// How fast is the snake moving
     /// </summary>
     public float Speed { get; private set; } = 1f;
 
+    /// <summary>
+    /// Which way is the snake moving?
+    /// </summary>
     public MoveDirection CurrentDirection { get; set; } = MoveDirection.Right;
 
     internal void Tick(float deltaTime)
@@ -47,5 +51,10 @@ public class Snake
                 Position += new Vector2(distance, 0);
                 break;
         }
+    }
+
+    internal void Turn(MoveDirection moveDirection)
+    {
+        CurrentDirection = moveDirection;
     }
 }

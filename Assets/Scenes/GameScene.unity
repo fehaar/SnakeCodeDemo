@@ -287,6 +287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameView
   snakePrefab: {fileID: 6864808118802527566, guid: b9c087df2eceb9243b2cf6825b2e3732, type: 3}
   snakeStartingSpeed: 5
+  movement: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
 --- !u!4 &523771957
 Transform:
   m_ObjectHideFlags: 0

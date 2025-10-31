@@ -29,4 +29,12 @@ public class SnakeView : MonoBehaviour
         // Update the visual representation
         line.SetPosition(line.positionCount - 1, new Vector3(snake.Position.x, snake.Position.y, 0));
     }
+
+    internal void Turn(Snake.MoveDirection moveDirection)
+    {
+        // We will add in a new segment of the line when we turn
+        line.positionCount++;
+        //line.SetPosition(line.positionCount - 1, new Vector3(snake.Position.x, snake.Position.y, 0));
+        snake.Turn(moveDirection);
+    }
 }
