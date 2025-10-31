@@ -7,18 +7,27 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class GameView : MonoBehaviour
 {
+    [Header("Snake")]
     [SerializeField]
     private SnakeView snakePrefab;
     [SerializeField]
     private float snakeStartingSpeed = 1f;
+    [SerializeField]
+    private InputActionReference movement;
 
+    [Header("Play area")]
     [SerializeField]
     private BoundariesView boundariesView;
     [SerializeField]
     private Vector2 boundariesStartingSize = new Vector2(150, 100);
 
+    [Header("Food")]
     [SerializeField]
-    private InputActionReference movement;
+    private FoodAreaView foodAreaView;
+    [SerializeField]
+    private float foodSpawnInterval = 5f;
+    [SerializeField]
+    private int maxFood = 6;
 
     private Snake snake;
 
@@ -26,11 +35,16 @@ public class GameView : MonoBehaviour
 
     void Start()
     {
+        // Set up the game
         snake = new Snake(snakeStartingSpeed);
 
         snakeView = Instantiate(snakePrefab);
         snakeView.Initialize(snake, movement.ToInputAction());
 
-        boundariesView.Initialize(new Boundaries(new Bounds(Vector3.zero, boundariesStartingSize)), snake);
+        var boundaries = new Boundaries(new Bounds(Vector3.zero, boundariesStartingSize));
+        boundariesView.Initialize(boundaries, snake);
+
+        var foodArea = new FoodArea(foodSpawnInterval, maxFood, boundaries);
+        foodAreaView.Initialize(foodArea, snake);
     }
 }

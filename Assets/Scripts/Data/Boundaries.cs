@@ -13,6 +13,8 @@ public class Boundaries
     private Bounds bounds;
 
     internal Vector3 Size => bounds.size;
+    internal Vector2 Min => bounds.min;
+    internal Vector2 Max => bounds.max;
 
     internal void KillSnakeOutsideArea(Snake snake)
     {
