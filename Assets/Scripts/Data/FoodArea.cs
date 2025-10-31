@@ -37,7 +37,8 @@ public class FoodArea
         if (availableFood.Count < maxFood && (spawnTimeLeft -= deltaTime) < 0)
         {
             spawnTimeLeft = spawnInterval;
-            var food = new Food(new Vector2(Random.Range(boundaries.Min.x + DISTANCE_FROM_EDGE, boundaries.Max.x - DISTANCE_FROM_EDGE), Random.Range(boundaries.Min.x + DISTANCE_FROM_EDGE, boundaries.Max.x - DISTANCE_FROM_EDGE)));
+            var food = new Food(new Vector2(Random.Range(boundaries.Min.x + DISTANCE_FROM_EDGE, boundaries.Max.x - DISTANCE_FROM_EDGE), Random.Range(boundaries.Min.y + DISTANCE_FROM_EDGE, boundaries.Max.y - DISTANCE_FROM_EDGE)));
+            availableFood.Add(food);
             return food;
         }
         return null;
