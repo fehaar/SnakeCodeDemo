@@ -36,7 +36,7 @@ public class SnakeView : MonoBehaviour
         }
     }
 
-void Start()
+    void Start()
     {
         line.SetPosition(0, new Vector3(snake.Position.x, snake.Position.y, 0));
         line.SetPosition(1, new Vector3(snake.Position.x, snake.Position.y, 0));
