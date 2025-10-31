@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -42,6 +43,7 @@ public class SnakeView : MonoBehaviour
             {
                 // We are too long and need to move our tail a bit
                 // We start from the back and see how much to cut off
+                var cullSegments = 0;
                 for (int j = 0; j < line.positionCount - 1; j++)
                 {
                     first = line.GetPosition(j);
@@ -49,6 +51,9 @@ public class SnakeView : MonoBehaviour
                     segmentLength = GetSegmentLength(first, second);
                     if (lengthDifference > segmentLength)
                     {
+                        // We need to cull a segment and then proceed with shortening
+                        cullSegments++;
+                        lengthDifference -= segmentLength;
                     }
                     else
                     {
@@ -76,6 +81,15 @@ public class SnakeView : MonoBehaviour
                         }
                         break;
                     }
+                }
+                if (cullSegments > 0)
+                {
+                    var oldPositions = new Vector3[line.positionCount];
+                    line.GetPositions(oldPositions);
+                    var newPositions = new Vector3[line.positionCount - cullSegments];
+                    Array.Copy(oldPositions, cullSegments, newPositions, 0, newPositions.Length);
+                    line.positionCount = newPositions.Length;
+                    line.SetPositions(newPositions);
                 }
             }
             else

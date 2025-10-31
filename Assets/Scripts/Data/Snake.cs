@@ -31,7 +31,7 @@ public class Snake
     /// <summary>
     /// How long is the snake
     /// </summary>
-    public float Length { get; private set; } = 30f;
+    public float Length { get; private set; } = 20f;
 
     /// <summary>
     /// Which way is the snake moving?
