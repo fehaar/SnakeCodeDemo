@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// This class represents the main game view in the application.
+/// This represents the main game view in the application.
 /// It's responsibility is to pull all of the other views together and manage the overall game state.
 /// </summary>
 public class GameView : MonoBehaviour
@@ -23,10 +23,6 @@ public class GameView : MonoBehaviour
     [SerializeField]
     private FoodAreaSettings foodAreaSettings;
 
-    [Header("Score")]
-    [SerializeField]
-    private ScoreView scoreView;
-
     private GameData gameData;
 
     private SnakeView snakeView;
@@ -35,18 +31,14 @@ public class GameView : MonoBehaviour
     {
         gameData = new GameData(snakeSettings, gameAreaSettings, foodAreaSettings);
 
-        // Set up the game
+        // Set up the snake
         snakeView = Instantiate(snakePrefab);
         snakeView.Initialize(gameData.Snake, movement.ToInputAction());
 
-        // Find this with code instead of having a firm reference as we would currently not benefit from having more than one in a scene
-        var gameAreaView = FindFirstObjectByType<GameAreaView>();
-        gameAreaView.Initialize(gameData);
-
-        // Find this with code instead of having a firm reference as we would currently not benefit from having more than one in a scene
-        var foodAreaView = FindFirstObjectByType<FoodAreaView>();
-        foodAreaView.Initialize(gameData);
-
-        scoreView.Initialize(gameData);
+        // Initialize all the other parts of the game in way where we do not need explicit references
+        foreach (var initializer in FindObjectsByType<GameDataInitializable>(FindObjectsSortMode.None))
+        {
+            initializer.Initialize(gameData);
+        }
     }
 }

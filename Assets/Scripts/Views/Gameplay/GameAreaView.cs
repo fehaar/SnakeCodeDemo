@@ -1,14 +1,12 @@
-using UnityEngine;
-
 /// <summary>
 /// Show the boundaries of the play area
 /// </summary>
-public class GameAreaView : MonoBehaviour
+public class GameAreaView : GameDataInitializable
 {
     private Snake snake;
     private GameArea gameArea;
 
-    public void Initialize(GameData gameData)
+    public override void Initialize(GameData gameData)
     {
         this.snake = gameData.Snake;
         this.gameArea = gameData.GameArea;

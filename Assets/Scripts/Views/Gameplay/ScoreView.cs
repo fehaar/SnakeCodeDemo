@@ -4,14 +4,14 @@ using UnityEngine;
 /// <summary>
 /// This view shows how much food we have eaten
 /// </summary>
-public class ScoreView : MonoBehaviour
+public class ScoreView : GameDataInitializable
 {
     [SerializeField]
     private TMP_Text label;
 
     private FoodArea foodArea;
 
-    public void Initialize(GameData gameData)
+    public override void Initialize(GameData gameData)
     {
         // If we are replaying, make sure to remove subscription to the old action
         if (this.foodArea != null)

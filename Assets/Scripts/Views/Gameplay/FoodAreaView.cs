@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Show the food in the food area and check if the snake eats any of the food
 /// </summary>
-public class FoodAreaView : MonoBehaviour
+public class FoodAreaView : GameDataInitializable
 {
     [SerializeField]
     private FoodView foodPrefab;
@@ -11,7 +11,7 @@ public class FoodAreaView : MonoBehaviour
     private FoodArea foodArea;
     private Snake snake;
 
-    public void Initialize(GameData gameData)
+    public override void Initialize(GameData gameData)
     {
         this.foodArea = gameData.FoodArea;
         this.snake = gameData.Snake;
