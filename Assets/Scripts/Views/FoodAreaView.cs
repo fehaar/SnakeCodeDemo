@@ -19,6 +19,10 @@ public class FoodAreaView : MonoBehaviour
 
     private void Update()
     {
+        if (snake.IsDead)
+        {
+            return;
+        }
         var food = foodArea.Tick(Time.deltaTime);
         if (food != null)
         {
