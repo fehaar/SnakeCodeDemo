@@ -113,19 +113,6 @@ public class SnakeView : MonoBehaviour
         SetSnakePositions();
     }
 
-    private static float GetSegmentLength(Vector3 first, Vector3 second)
-    {
-        // Since the lines are always perpendicular - we can avoid using sqrt
-        if (first.x == second.x)
-        {
-            return Mathf.Abs(first.y - second.y);
-        }
-        else
-        {
-            return Mathf.Abs(first.x - second.x);
-        }
-    }
-
     private async UniTask EndGameAnimation()
     {
         deathAnimation.startValue = snake.Length;
