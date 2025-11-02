@@ -4,10 +4,10 @@ using UnityEngine;
 public class SnakeSettings : ScriptableObject
 {
     [SerializeField]
-    [Tooltip("What is the starting speed of the snake")]
+    [Tooltip("The starting speed of the snake")]
     private float snakeStartingSpeed = 1f;
     [SerializeField]
-    [Tooltip("What is the starting length of the snake")]
+    [Tooltip("The starting length of the snake")]
     private int snakeStartingLength = 20;
     [SerializeField]
     [Tooltip("How much does the snake increase in length when it eats")]

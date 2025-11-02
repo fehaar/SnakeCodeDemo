@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af07fbfc7091ef443a08cc8d58030c55, type: 3}
   m_Name: SnakeSettings
   m_EditorClassIdentifier: Assembly-CSharp::SnakeSettings
-  snakePrefab: {fileID: 6864808118802527566, guid: b9c087df2eceb9243b2cf6825b2e3732, type: 3}
-  snakeStartingSpeed: 1
+  snakeStartingSpeed: 10
   snakeStartingLength: 20
   snakeLengthIncrement: 20
-  snakeSpeedIncrement: 20
+  snakeSpeedIncrement: 2
