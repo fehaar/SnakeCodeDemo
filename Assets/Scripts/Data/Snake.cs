@@ -1,4 +1,5 @@
 using System;
+using Unity.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -13,6 +14,10 @@ public class Snake
         Length = snakeStartingLength;
         this.snakeLengthIncrement = snakeLengthIncrement;
         this.snakeSpeedIncrement = snakeSpeedIncrement;
+
+        // Initialize the snake line segments
+        lineSegments1[0] = Position;
+        lineSegments1[1] = Position;
     }
 
     public enum MoveDirection
@@ -45,10 +50,16 @@ public class Snake
     private float snakeLengthIncrement = 20f;
     private float snakeSpeedIncrement = 1f;
 
+    private int startIndex = 0;
+    private int length = 2;
+    private NativeArray<Vector3> lineSegments1 = new NativeArray<Vector3>(2000, Allocator.Domain);
+
     /// <summary>
     /// Which way is the snake moving?
     /// </summary>
     public MoveDirection CurrentDirection { get; set; } = MoveDirection.Right;
+
+    public NativeSlice<Vector3> Positions => lineSegments1.Slice(startIndex, length);
 
     internal void Tick(float deltaTime)
     {
@@ -68,6 +79,7 @@ public class Snake
                 Position += new Vector2(distance, 0);
                 break;
         }
+        lineSegments1[length - 1] = Position;
     }
 
     internal void Turn(MoveDirection moveDirection)
@@ -104,6 +116,7 @@ public class Snake
         }
 
         CurrentDirection = moveDirection;
+        length++;
     }
 
     internal void Kill()

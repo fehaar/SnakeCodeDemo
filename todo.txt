@@ -1,0 +1,8 @@
+TODO list:
+- End animation timing
+- Refactor snake
+- Make food not spawn on the snake
+- Make README
+? Make readme for DUNGEON
+- Polish
+- Two snakes
