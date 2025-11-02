@@ -12,6 +12,9 @@ public class FoodArea
         this.maxFood = maxFood;
         this.boundaries = boundaries;
     }
+    public int FoodEaten { get; private set; } = 0;
+
+    public event System.Action<int> FoodEatenChanged;
 
     private float spawnInterval;
     private int maxFood;
@@ -47,5 +50,7 @@ public class FoodArea
     internal void Eat(Food food)
     {
         availableFood.Remove(food);
+        FoodEaten++;
+        FoodEatenChanged?.Invoke(FoodEaten);
     }
 }

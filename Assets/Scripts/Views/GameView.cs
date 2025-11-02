@@ -29,6 +29,10 @@ public class GameView : MonoBehaviour
     [SerializeField]
     private int maxFood = 6;
 
+    [Header("Score")]
+    [SerializeField]
+    private ScoreView scoreView;
+
     private Snake snake;
 
     private SnakeView snakeView;
@@ -46,5 +50,7 @@ public class GameView : MonoBehaviour
 
         var foodArea = new FoodArea(foodSpawnInterval, maxFood, boundaries);
         foodAreaView.Initialize(foodArea, snake);
+
+        scoreView.Initialize(foodArea);
     }
 }
