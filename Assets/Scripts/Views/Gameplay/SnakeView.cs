@@ -43,12 +43,6 @@ public class SnakeView : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        //line.SetPosition(0, new Vector3(snake.Position.x, snake.Position.y, 0));
-        //line.SetPosition(1, new Vector3(snake.Position.x, snake.Position.y, 0));
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -61,12 +55,10 @@ public class SnakeView : MonoBehaviour
         snake.Tick(Time.deltaTime);
 
         // Update the visual representation
-        //line.SetPosition(line.positionCount - 1, new Vector3(snake.Position.x, snake.Position.y, 0));
-        line.SetPositions(snake.Positions);
+        var positions = snake.Positions;
+        line.positionCount = positions.Length;
+        line.SetPositions(positions);
         body.MovePosition(snake.Position);
-
-        // Cull the tail of the snake by looking at it from the head 
-        //AdjustTailLength(snake.Length);
         
         // Check if we are hitting out own line
         CheckCollisionWithSelf();
@@ -217,8 +209,6 @@ public class SnakeView : MonoBehaviour
             return;
         }
         // We will add in a new segment of the line when we turn, and initialize it to the head of the snake.
-        line.positionCount++;
-        line.SetPosition(line.positionCount - 1, new Vector3(snake.Position.x, snake.Position.y, 0));
         snake.Turn(moveDirection);
     }
 

@@ -79,7 +79,8 @@ public class Snake
                 Position += new Vector2(distance, 0);
                 break;
         }
-        lineSegments1[length - 1] = Position;
+        lineSegments1[startIndex + length - 1] = Position;
+        AdjustTailLength(Length);
     }
 
     internal void Turn(MoveDirection moveDirection)
@@ -116,7 +117,90 @@ public class Snake
         }
 
         CurrentDirection = moveDirection;
+        // We will add a new segment to the line when we turn
         length++;
+        lineSegments1[startIndex + length - 1] = Position;
+    }
+
+    private void AdjustTailLength(float totalLength)
+    {
+        var lineLength = 0f;
+        for (int i = startIndex + length - 1; i >= startIndex + 1; i--)
+        {
+            // Sum up the length of the snake from the head and back
+            var first = lineSegments1[i];
+            var second = lineSegments1[i - 1];
+            var segmentLength = 0f;
+            segmentLength = GetSegmentLength(first, second);
+            var lengthDifference = lineLength + segmentLength - totalLength;
+            // Stop when we reach the max length of the snake
+            if (lengthDifference > 0)
+            {
+                // We are too long and need to move our tail a bit
+                // We start from the back and see how much to cut off
+                var segmentsToRemove = 0;
+                for (int j = startIndex; j < startIndex + length - 1; j++)
+                {
+                    first = lineSegments1[j];
+                    second = lineSegments1[j + 1];
+                    segmentLength = GetSegmentLength(first, second);
+                    if (lengthDifference >= segmentLength)
+                    {
+                        // We need to cull a segment and then proceed with shortening
+                        segmentsToRemove++;
+                        lengthDifference -= segmentLength;
+                    }
+                    else
+                    {
+                        if (first.x == second.x)
+                        {
+                            if (first.y > second.y)
+                            {
+                                lineSegments1[j] = new Vector3(first.x, first.y - lengthDifference, 0);
+                            }
+                            else
+                            {
+                                lineSegments1[j] = new Vector3(first.x, first.y + lengthDifference, 0);
+                            }
+                        }
+                        else
+                        {
+                            if (first.x > second.x)
+                            {
+                                lineSegments1[j] = new Vector3(first.x - lengthDifference, first.y, 0);
+                            }
+                            else
+                            {
+                                lineSegments1[j] = new Vector3(first.x + lengthDifference, first.y, 0);
+                            }
+                        }
+                        break;
+                    }
+                }
+                if (segmentsToRemove > 0)
+                {
+                    startIndex += segmentsToRemove;
+                    length -= segmentsToRemove;
+                }
+            }
+            else
+            {
+                lineLength += segmentLength;
+            }
+        }
+    }
+
+    private static float GetSegmentLength(Vector3 first, Vector3 second)
+    {
+        // Since the lines are always perpendicular - we can avoid using sqrt
+        if (first.x == second.x)
+        {
+            return Mathf.Abs(first.y - second.y);
+        }
+        else
+        {
+            return Mathf.Abs(first.x - second.x);
+        }
     }
 
     internal void Kill()
