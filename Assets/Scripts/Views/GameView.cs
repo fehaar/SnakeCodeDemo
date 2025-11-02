@@ -11,7 +11,7 @@ public class GameView : MonoBehaviour
     [SerializeField]
     private SnakeView snakePrefab;
     [SerializeField]
-    private float snakeStartingSpeed = 1f;
+    private SnakeSettings snakeSettings;
     [SerializeField]
     private InputActionReference movement;
 
@@ -40,8 +40,7 @@ public class GameView : MonoBehaviour
     void Start()
     {
         // Set up the game
-        snake = new Snake(snakeStartingSpeed);
-
+        snake = snakeSettings.CreateSnake();
         snakeView = Instantiate(snakePrefab);
         snakeView.Initialize(snake, movement.ToInputAction());
 

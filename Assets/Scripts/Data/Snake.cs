@@ -6,9 +6,12 @@ using UnityEngine;
 /// </summary>
 public class Snake
 {
-    public Snake(float snakeStartingSpeed)
+    public Snake(float snakeStartingSpeed, int snakeStartingLength, float snakeLengthIncrement, float snakeSpeedIncrement)
     {
         this.Speed = snakeStartingSpeed;
+        Length = snakeStartingLength;
+        this.snakeLengthIncrement = snakeLengthIncrement;
+        this.snakeSpeedIncrement = snakeSpeedIncrement;
     }
 
     public enum MoveDirection
@@ -35,6 +38,9 @@ public class Snake
     public float Length { get; private set; } = 20f;
 
     public bool IsDead { get; private set; } = false;
+
+    private float snakeLengthIncrement = 20f;
+    private float snakeSpeedIncrement = 1f;
 
     /// <summary>
     /// Which way is the snake moving?
@@ -104,7 +110,7 @@ public class Snake
 
     internal void Eat(FoodView food)
     {
-        Length += 20;
-        Speed += 1f;
+        Length += snakeLengthIncrement;
+        Speed += snakeSpeedIncrement;
     }
 }
