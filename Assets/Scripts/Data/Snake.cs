@@ -52,7 +52,11 @@ public class Snake : IDisposable
 
     private int startIndex = 0;
     private int segmentCount = 2;
-    private NativeArray<Vector3> activeLineSegments = new NativeArray<Vector3>(2000, Allocator.Domain);
+    // Note that we are using an array here for performance that we roll along in when turning and then start from the beginning
+    // in the reserve array when we reach the end. Since it has a limited size we can only have 1000 turns active on screen.
+    // Hopefully that is enough otherwise we should bump the size.
+    private NativeArray<Vector3> activeLineSegments = new NativeArray<Vector3>(1000, Allocator.Domain);
+    private NativeArray<Vector3> reserveLineSegments = new NativeArray<Vector3>(1000, Allocator.Domain);
 
     /// <summary>
     /// Which way is the snake moving?
@@ -118,7 +122,18 @@ public class Snake : IDisposable
 
         CurrentDirection = moveDirection;
         // We will add a new segment to the line when we turn
+        if (startIndex + segmentCount == activeLineSegments.Length)
+        {
+            // Copy the active array to the start of the reserve
+            NativeArray<Vector3>.Copy(activeLineSegments, startIndex, reserveLineSegments, 0, segmentCount);
+            startIndex = 0;
+            // And then swap the two arrays
+            var tmp = activeLineSegments;
+            activeLineSegments = reserveLineSegments;
+            reserveLineSegments = tmp;
+        }
         segmentCount++;
+
         activeLineSegments[startIndex + segmentCount - 1] = Position;
     }
 
@@ -218,5 +233,6 @@ public class Snake : IDisposable
     public void Dispose()
     {
         activeLineSegments.Dispose();
+        reserveLineSegments.Dispose();
     }
 }
