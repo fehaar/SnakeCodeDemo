@@ -21,11 +21,7 @@ public class GameView : MonoBehaviour
 
     [Header("Food")]
     [SerializeField]
-    private FoodAreaView foodAreaView;
-    [SerializeField]
-    private float foodSpawnInterval = 5f;
-    [SerializeField]
-    private int maxFood = 6;
+    private FoodAreaSettings foodAreaSettings;
 
     [Header("Score")]
     [SerializeField]
@@ -43,10 +39,13 @@ public class GameView : MonoBehaviour
         snakeView.Initialize(snake, movement.ToInputAction());
 
         var gameArea = gameAreaSettings.CreateGameArea();
+        // Find this with code instead of having a firm reference as we would currently not benefit from having more than one in a scene
         var gameAreaView = FindFirstObjectByType<GameAreaView>();
         gameAreaView.Initialize(gameArea, snake);
 
-        var foodArea = new FoodArea(foodSpawnInterval, maxFood, gameArea);
+        var foodArea = foodAreaSettings.CreateFoodArea(gameArea);
+        // Find this with code instead of having a firm reference as we would currently not benefit from having more than one in a scene
+        var foodAreaView = FindFirstObjectByType<FoodAreaView>();
         foodAreaView.Initialize(foodArea, snake);
 
         scoreView.Initialize(foodArea);
