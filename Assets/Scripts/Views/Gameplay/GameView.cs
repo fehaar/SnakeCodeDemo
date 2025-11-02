@@ -31,7 +31,7 @@ public class GameView : MonoBehaviour
 
     private SnakeView snakeView;
 
-    void Start()
+    internal void StartGame()
     {
         // Set up the game
         snake = snakeSettings.CreateSnake();

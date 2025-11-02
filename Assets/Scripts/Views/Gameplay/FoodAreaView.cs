@@ -19,6 +19,12 @@ public class FoodAreaView : MonoBehaviour
 
     private void Update()
     {
+        // Check if the game is started at all
+        if (snake == null)
+        {
+            return;
+        }
+        // If the snake is dead, don't spawn more food
         if (snake.IsDead)
         {
             return;

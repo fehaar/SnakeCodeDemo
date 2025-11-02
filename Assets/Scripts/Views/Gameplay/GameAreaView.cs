@@ -17,6 +17,9 @@ public class GameAreaView : MonoBehaviour
 
     private void Update()
     {
-        boundaries.KillSnakeOutsideArea(snake);
+        if (this.boundaries != null)
+        {
+            boundaries.KillSnakeOutsideArea(snake);
+        }
     }
 }

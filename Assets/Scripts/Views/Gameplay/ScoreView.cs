@@ -19,7 +19,10 @@ public class ScoreView : MonoBehaviour
 
     private void OnDestroy()
     {
-        foodArea.FoodEatenChanged -= FoodArea_FoodEatenChanged;
+        if (foodArea != null)
+        {
+            foodArea.FoodEatenChanged -= FoodArea_FoodEatenChanged;
+        }
     }
 
     private void FoodArea_FoodEatenChanged(int amount)
