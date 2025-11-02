@@ -57,9 +57,6 @@ public class SnakeView : MonoBehaviour
         // Update the visual representation
         SetSnakePositions();
         body.MovePosition(snake.Position);
-
-        // Check if we are hitting out own line
-        CheckCollisionWithSelf();
     }
 
     private void SetSnakePositions()
@@ -67,41 +64,6 @@ public class SnakeView : MonoBehaviour
         var positions = snake.Positions;
         line.positionCount = positions.Length;
         line.SetPositions(positions);
-    }
-
-    private void CheckCollisionWithSelf()
-    {
-        // As we are moving perpendicularly, it is impossible to collide with the two line segmensts closest to the head
-        if (line.positionCount > 3)
-        {
-            for (int i = 0; i < line.positionCount - 3; i++)
-            {
-                var first = line.GetPosition(i);
-                var second = line.GetPosition(i + 1);
-                if (first.x == second.x)
-                {
-                    // This is a vertical line - is our head x close enough to the line
-                    if (Math.Abs(snake.Position.x - first.x) <= COLLISION_DISTANCE)
-                    {
-                        if (snake.Position.y < Math.Max(first.y, second.y) && snake.Position.y > Math.Min(first.y, second.y))
-                        {
-                            snake.Kill();
-                        }
-                    }
-                }
-                else
-                {
-                    // This is a horizontal line - is our head y close enough to the line
-                    if (Math.Abs(snake.Position.y - first.y) <= COLLISION_DISTANCE)
-                    {
-                        if (snake.Position.x < Math.Max(first.x, second.x) && snake.Position.x > Math.Min(first.x, second.x))
-                        {
-                            snake.Kill();
-                        }
-                    }
-                }
-            }
-        }
     }
 
     /// <summary>

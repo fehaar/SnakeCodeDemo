@@ -51,7 +51,7 @@ public class Snake : IDisposable
     private float snakeSpeedIncrement = 1f;
 
     private int startIndex = 0;
-    private int segmentCount = 2;
+    private int pointCount = 2;
     // Note that we are using an array here for performance that we roll along in when turning and then start from the beginning
     // in the reserve array when we reach the end. Since it has a limited size we can only have 1000 turns active on screen.
     // Hopefully that is enough otherwise we should bump the size.
@@ -63,7 +63,7 @@ public class Snake : IDisposable
     /// </summary>
     public MoveDirection CurrentDirection { get; set; } = MoveDirection.Right;
 
-    public NativeSlice<Vector3> Positions => activeLineSegments.Slice(startIndex, segmentCount);
+    public NativeSlice<Vector3> Positions => activeLineSegments.Slice(startIndex, pointCount);
 
     internal void Tick(float deltaTime)
     {
@@ -83,8 +83,9 @@ public class Snake : IDisposable
                 Position += new Vector2(distance, 0);
                 break;
         }
-        activeLineSegments[startIndex + segmentCount - 1] = Position;
+        activeLineSegments[startIndex + pointCount - 1] = Position;
         AdjustTailLength(Length);
+        CheckCollisionWithSelf();
     }
 
     internal void Turn(MoveDirection moveDirection)
@@ -122,25 +123,25 @@ public class Snake : IDisposable
 
         CurrentDirection = moveDirection;
         // We will add a new segment to the line when we turn
-        if (startIndex + segmentCount == activeLineSegments.Length)
+        if (startIndex + pointCount == activeLineSegments.Length)
         {
             // Copy the active array to the start of the reserve
-            NativeArray<Vector3>.Copy(activeLineSegments, startIndex, reserveLineSegments, 0, segmentCount);
+            NativeArray<Vector3>.Copy(activeLineSegments, startIndex, reserveLineSegments, 0, pointCount);
             startIndex = 0;
             // And then swap the two arrays
             var tmp = activeLineSegments;
             activeLineSegments = reserveLineSegments;
             reserveLineSegments = tmp;
         }
-        segmentCount++;
+        pointCount++;
 
-        activeLineSegments[startIndex + segmentCount - 1] = Position;
+        activeLineSegments[startIndex + pointCount - 1] = Position;
     }
 
     internal void AdjustTailLength(float totalLength)
     {
         var lineLength = 0f;
-        for (int i = startIndex + segmentCount - 1; i >= startIndex + 1; i--)
+        for (int i = startIndex + pointCount - 1; i >= startIndex + 1; i--)
         {
             // Sum up the length of the snake from the head and back
             var first = activeLineSegments[i];
@@ -154,7 +155,7 @@ public class Snake : IDisposable
                 // We are too long and need to move our tail a bit
                 // We start from the back and see how much to cut off
                 var segmentsToRemove = 0;
-                for (int j = startIndex; j < startIndex + segmentCount - 1; j++)
+                for (int j = startIndex; j < startIndex + pointCount - 1; j++)
                 {
                     first = activeLineSegments[j];
                     second = activeLineSegments[j + 1];
@@ -195,12 +196,54 @@ public class Snake : IDisposable
                 if (segmentsToRemove > 0)
                 {
                     startIndex += segmentsToRemove;
-                    segmentCount -= segmentsToRemove;
+                    pointCount -= segmentsToRemove;
                 }
             }
             else
             {
                 lineLength += segmentLength;
+            }
+        }
+    }
+
+    /// <summary>
+    /// If the snake collides with it's own tail it will die
+    /// </summary>
+    internal void CheckCollisionWithSelf()
+    {
+        // This is used to give some slack to the area we collide in
+        const float COLLISION_DISTANCE = 0.5f;
+
+        // As we are moving perpendicularly, it is impossible to collide with the two line segmensts closest to the head
+        // So we need to have more than 
+        if (pointCount > 3)
+        {
+            for (int i = startIndex; i < startIndex + pointCount - 3; i++)
+            {
+                var first = activeLineSegments[i];
+                var second = activeLineSegments[i + 1];
+                if (first.x == second.x)
+                {
+                    // This is a vertical line - is our head x close enough to the line
+                    if (Math.Abs(Position.x - first.x) <= COLLISION_DISTANCE)
+                    {
+                        if (Position.y < Math.Max(first.y, second.y) && Position.y > Math.Min(first.y, second.y))
+                        {
+                            Kill();
+                        }
+                    }
+                }
+                else
+                {
+                    // This is a horizontal line - is our head y close enough to the line
+                    if (Math.Abs(Position.y - first.y) <= COLLISION_DISTANCE)
+                    {
+                        if (Position.x < Math.Max(first.x, second.x) && Position.x > Math.Min(first.x, second.x))
+                        {
+                            Kill();
+                        }
+                    }
+                }
             }
         }
     }
