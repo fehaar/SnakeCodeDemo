@@ -12,19 +12,25 @@ public class StartMenuView : MonoBehaviour
     private Button startButton;
 
     [SerializeField]
-    private List<SnakeSettings> snakes = new List<SnakeSettings>();
+    private List<SnakeSettings> snakeSettings = new List<SnakeSettings>();
     [SerializeField]
     private TMP_Dropdown snakeSettingsSelector;
 
     [SerializeField]
     private List<GameAreaSettings> gameAreaSettings = new List<GameAreaSettings>();
+    [SerializeField]
+    private TMP_Dropdown gameAreaSettingsSelector;
 
     [SerializeField]
     private List<FoodAreaSettings> foodAreaSettings = new List<FoodAreaSettings>();
+    [SerializeField]
+    private TMP_Dropdown foodAreaSettingsSelector;
 
     void Start()
     {
-        snakeSettingsSelector.AddOptions(snakes.Select(s => s.name).ToList());
+        snakeSettingsSelector.AddOptions(snakeSettings.Select(s => s.name).ToList());
+        gameAreaSettingsSelector.AddOptions(gameAreaSettings.Select(s => s.name).ToList());
+        foodAreaSettingsSelector.AddOptions(foodAreaSettings.Select(s => s.name).ToList());
 
         startButton.onClick.AddListener(StartGame);
     }
@@ -34,6 +40,6 @@ public class StartMenuView : MonoBehaviour
         gameObject.SetActive(false);
 
         var gameView = FindFirstObjectByType<GameView>();
-        gameView.StartGame(new GameData(snakes[snakeSettingsSelector.value], gameAreaSettings[0], foodAreaSettings[0]));
+        gameView.StartGame(new GameData(snakeSettings[snakeSettingsSelector.value], gameAreaSettings[gameAreaSettingsSelector.value], foodAreaSettings[foodAreaSettingsSelector.value]));
     }
 }
