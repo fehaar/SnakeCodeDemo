@@ -47,6 +47,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4671c1e2c98f9764c8903d100598958d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SnakeView
+  deathAnimation:
+    startFromCurrent: 0
+    startValue: 0
+    endValue: 0.01
+    settings:
+      duration: 2
+      ease: 2
+      customEase:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      cycles: 1
+      cycleMode: 0
+      startDelay: 0.1
+      endDelay: 0
+      useUnscaledTime: 0
+      _useFixedUpdate: 0
+      _updateType: 0
 --- !u!120 &8373010259144407406
 LineRenderer:
   serializedVersion: 2

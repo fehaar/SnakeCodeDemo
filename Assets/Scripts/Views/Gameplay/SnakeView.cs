@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using PrimeTween;
 using System;
 using UnityEngine;
 
@@ -7,6 +8,9 @@ using UnityEngine;
 /// </summary>
 public class SnakeView : MonoBehaviour
 {
+    [SerializeField]
+    private TweenSettings<float> deathAnimation;
+
     private Snake snake;
     private LineRenderer line;
     private Rigidbody2D body;
@@ -24,12 +28,6 @@ public class SnakeView : MonoBehaviour
         this.line = GetComponent<LineRenderer>();
         inputAction.performed += InputAction_performed;
         this.body = GetComponent<Rigidbody2D>();
-    }
-
-    private async UniTask EndGameAnimation()
-    {
-        await UniTask.Delay(1000);
-        Destroy(gameObject);
     }
 
     private void InputAction_performed(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -67,7 +65,7 @@ public class SnakeView : MonoBehaviour
         body.MovePosition(snake.Position);
 
         // Cull the tail of the snake by looking at it from the head 
-        AdjustTailLength();
+        AdjustTailLength(snake.Length);
 
         // Check if we are hitting out own line
         CheckCollisionWithSelf();
@@ -111,7 +109,7 @@ public class SnakeView : MonoBehaviour
     /// <summary>
     /// Since the history of the snake is only held in the line renderer, we will have to do correction of the snake directly in the points of the renderer
     /// </summary>
-    private void AdjustTailLength()
+    private void AdjustTailLength(float totalLength)
     {
         var lineLength = 0f;
         for (int i = line.positionCount - 1; i >= 1; i--)
@@ -121,7 +119,7 @@ public class SnakeView : MonoBehaviour
             var second = line.GetPosition(i - 1);
             var segmentLength = 0f;
             segmentLength = GetSegmentLength(first, second);
-            var lengthDifference = lineLength + segmentLength - snake.Length;
+            var lengthDifference = lineLength + segmentLength - totalLength;
             if (lengthDifference > 0)
             {
                 // We are too long and need to move our tail a bit
@@ -201,6 +199,13 @@ public class SnakeView : MonoBehaviour
         {
             return Mathf.Abs(first.x - second.x);
         }
+    }
+
+    private async UniTask EndGameAnimation()
+    {
+        deathAnimation.startValue = snake.Length;
+        await Tween.Custom(deathAnimation, AdjustTailLength);
+        Destroy(gameObject);
     }
 
     private void Turn(Snake.MoveDirection moveDirection)
