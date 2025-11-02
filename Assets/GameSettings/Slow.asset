@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af07fbfc7091ef443a08cc8d58030c55, type: 3}
-  m_Name: SnakeSettings
+  m_Name: Slow
   m_EditorClassIdentifier: Assembly-CSharp::SnakeSettings
-  snakeStartingSpeed: 10
+  snakeStartingSpeed: 5
   snakeStartingLength: 20
-  snakeLengthIncrement: 20
-  snakeSpeedIncrement: 2
+  snakeLengthIncrement: 10
+  snakeSpeedIncrement: 1.5

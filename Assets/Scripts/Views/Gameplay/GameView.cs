@@ -27,9 +27,9 @@ public class GameView : MonoBehaviour
 
     private SnakeView snakeView;
 
-    internal void StartGame()
+    internal void StartGame(GameData gameData)
     {
-        gameData = new GameData(snakeSettings, gameAreaSettings, foodAreaSettings);
+        this.gameData = gameData;
 
         // Set up the snake
         snakeView = Instantiate(snakePrefab);
