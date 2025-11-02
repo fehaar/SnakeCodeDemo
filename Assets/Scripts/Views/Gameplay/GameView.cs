@@ -36,9 +36,23 @@ public class GameView : MonoBehaviour
         snakeView.Initialize(gameData.Snake, movement.ToInputAction());
 
         // Initialize all the other parts of the game in way where we do not need explicit references
-        foreach (var initializer in FindObjectsByType<GameDataInitializable>(FindObjectsSortMode.None))
+        foreach (var initializer in FindObjectsByType<GameDataInitializable>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
             initializer.Initialize(gameData);
+        }
+    }
+
+    private void Update()
+    {
+        if (gameData == null)
+        {
+            return;
+        }
+        if (gameData.Snake.IsDead)
+        {
+            gameData.EndGame();
+            Destroy(snakeView.gameObject);
+            gameData = null;
         }
     }
 }

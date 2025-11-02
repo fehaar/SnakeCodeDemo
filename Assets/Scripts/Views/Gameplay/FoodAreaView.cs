@@ -8,13 +8,26 @@ public class FoodAreaView : GameDataInitializable
     [SerializeField]
     private FoodView foodPrefab;
 
+    private GameData gameData;
     private FoodArea foodArea;
     private Snake snake;
 
     public override void Initialize(GameData gameData)
     {
+        this.gameData = gameData;
+        this.gameData.OnGameEnded += OnGameEnded;
         this.foodArea = gameData.FoodArea;
         this.snake = gameData.Snake;
+    }
+
+    private void OnGameEnded()
+    {
+        this.gameData.OnGameEnded -= OnGameEnded;
+
+        foreach (var leftoverFood in GetComponentsInChildren<FoodView>())
+        {
+            Destroy(leftoverFood.gameObject);
+        }
     }
 
     private void Update()

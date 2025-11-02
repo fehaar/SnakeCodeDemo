@@ -21,6 +21,7 @@ public class ScoreView : GameDataInitializable
 
         this.foodArea = gameData.FoodArea;
         this.foodArea.FoodEatenChanged += FoodArea_FoodEatenChanged;
+        label.text = this.foodArea.FoodEaten.ToString();
     }
 
     private void OnDestroy()
