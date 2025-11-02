@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 
@@ -16,12 +17,19 @@ public class SnakeView : MonoBehaviour
     private Vector3[] oldPositions = Array.Empty<Vector3>();
     private Vector3[] newPositions = Array.Empty<Vector3>();
 
-    public void Initialize(Snake snake, UnityEngine.InputSystem.InputAction inputAction)
+    public void Initialize(GameData gameData, UnityEngine.InputSystem.InputAction inputAction)
     {
-        this.snake = snake;
+        this.snake = gameData.Snake;
+        gameData.AddEndGameTaskFactory(EndGameAnimation);
         this.line = GetComponent<LineRenderer>();
         inputAction.performed += InputAction_performed;
         this.body = GetComponent<Rigidbody2D>();
+    }
+
+    private async UniTask EndGameAnimation()
+    {
+        await UniTask.Delay(1000);
+        Destroy(gameObject);
     }
 
     private void InputAction_performed(UnityEngine.InputSystem.InputAction.CallbackContext context)
