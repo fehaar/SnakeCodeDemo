@@ -55,13 +55,18 @@ public class SnakeView : MonoBehaviour
         snake.Tick(Time.deltaTime);
 
         // Update the visual representation
+        SetSnakePositions();
+        body.MovePosition(snake.Position);
+
+        // Check if we are hitting out own line
+        CheckCollisionWithSelf();
+    }
+
+    private void SetSnakePositions()
+    {
         var positions = snake.Positions;
         line.positionCount = positions.Length;
         line.SetPositions(positions);
-        body.MovePosition(snake.Position);
-        
-        // Check if we are hitting out own line
-        CheckCollisionWithSelf();
     }
 
     private void CheckCollisionWithSelf()
@@ -102,83 +107,10 @@ public class SnakeView : MonoBehaviour
     /// <summary>
     /// Since the history of the snake is only held in the line renderer, we will have to do correction of the snake directly in the points of the renderer
     /// </summary>
-    private void AdjustTailLength(float totalLength)
+    private void ReduceTailLength(float currentLength)
     {
-        var lineLength = 0f;
-        for (int i = line.positionCount - 1; i >= 1; i--)
-        {
-            // Sum up the length of the snake
-            var first = line.GetPosition(i);
-            var second = line.GetPosition(i - 1);
-            var segmentLength = 0f;
-            segmentLength = GetSegmentLength(first, second);
-            var lengthDifference = lineLength + segmentLength - totalLength;
-            if (lengthDifference > 0)
-            {
-                // We are too long and need to move our tail a bit
-                // We start from the back and see how much to cut off
-                var segmentsToRemove = 0;
-                for (int j = 0; j < line.positionCount - 1; j++)
-                {
-                    first = line.GetPosition(j);
-                    second = line.GetPosition(j + 1);
-                    segmentLength = GetSegmentLength(first, second);
-                    if (lengthDifference > segmentLength)
-                    {
-                        // We need to cull a segment and then proceed with shortening
-                        segmentsToRemove++;
-                        lengthDifference -= segmentLength;
-                    }
-                    else
-                    {
-                        if (first.x == second.x)
-                        {
-                            if (first.y > second.y)
-                            {
-                                line.SetPosition(j, new Vector3(first.x, first.y - lengthDifference, 0));
-                            }
-                            else
-                            {
-                                line.SetPosition(j, new Vector3(first.x, first.y + lengthDifference, 0));
-                            }
-                        }
-                        else
-                        {
-                            if (first.x > second.x)
-                            {
-                                line.SetPosition(j, new Vector3(first.x - lengthDifference, first.y, 0));
-                            }
-                            else
-                            {
-                                line.SetPosition(j, new Vector3(first.x + lengthDifference, first.y, 0));
-                            }
-                        }
-                        break;
-                    }
-                }
-                if (segmentsToRemove > 0)
-                {
-                    // Do the segment removal in one array copy
-                    if (oldPositions.Length != line.positionCount)
-                    {
-                        oldPositions = new Vector3[line.positionCount];
-                    }
-                    line.GetPositions(oldPositions);
-                    var newLength = line.positionCount - segmentsToRemove;
-                    if (newPositions.Length != newLength)
-                    {
-                        newPositions = new Vector3[newLength];
-                    }
-                    Array.Copy(oldPositions, segmentsToRemove, newPositions, 0, newLength);
-                    line.positionCount = newPositions.Length;
-                    line.SetPositions(newPositions);
-                }
-            }
-            else
-            {
-                lineLength += segmentLength;
-            }
-        }
+        snake.AdjustTailLength(currentLength);
+        SetSnakePositions();
     }
 
     private static float GetSegmentLength(Vector3 first, Vector3 second)
@@ -197,7 +129,7 @@ public class SnakeView : MonoBehaviour
     private async UniTask EndGameAnimation()
     {
         deathAnimation.startValue = snake.Length;
-        await Tween.Custom(deathAnimation, AdjustTailLength);
+        await Tween.Custom(deathAnimation, ReduceTailLength);
         Destroy(gameObject);
     }
 

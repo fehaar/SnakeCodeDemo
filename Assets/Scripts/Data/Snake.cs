@@ -16,8 +16,8 @@ public class Snake
         this.snakeSpeedIncrement = snakeSpeedIncrement;
 
         // Initialize the snake line segments
-        lineSegments1[0] = Position;
-        lineSegments1[1] = Position;
+        activeLineSegments[0] = Position;
+        activeLineSegments[1] = Position;
     }
 
     public enum MoveDirection
@@ -51,15 +51,15 @@ public class Snake
     private float snakeSpeedIncrement = 1f;
 
     private int startIndex = 0;
-    private int length = 2;
-    private NativeArray<Vector3> lineSegments1 = new NativeArray<Vector3>(2000, Allocator.Domain);
+    private int segmentCount = 2;
+    private NativeArray<Vector3> activeLineSegments = new NativeArray<Vector3>(2000, Allocator.Domain);
 
     /// <summary>
     /// Which way is the snake moving?
     /// </summary>
     public MoveDirection CurrentDirection { get; set; } = MoveDirection.Right;
 
-    public NativeSlice<Vector3> Positions => lineSegments1.Slice(startIndex, length);
+    public NativeSlice<Vector3> Positions => activeLineSegments.Slice(startIndex, segmentCount);
 
     internal void Tick(float deltaTime)
     {
@@ -79,7 +79,7 @@ public class Snake
                 Position += new Vector2(distance, 0);
                 break;
         }
-        lineSegments1[startIndex + length - 1] = Position;
+        activeLineSegments[startIndex + segmentCount - 1] = Position;
         AdjustTailLength(Length);
     }
 
@@ -118,18 +118,18 @@ public class Snake
 
         CurrentDirection = moveDirection;
         // We will add a new segment to the line when we turn
-        length++;
-        lineSegments1[startIndex + length - 1] = Position;
+        segmentCount++;
+        activeLineSegments[startIndex + segmentCount - 1] = Position;
     }
 
-    private void AdjustTailLength(float totalLength)
+    internal void AdjustTailLength(float totalLength)
     {
         var lineLength = 0f;
-        for (int i = startIndex + length - 1; i >= startIndex + 1; i--)
+        for (int i = startIndex + segmentCount - 1; i >= startIndex + 1; i--)
         {
             // Sum up the length of the snake from the head and back
-            var first = lineSegments1[i];
-            var second = lineSegments1[i - 1];
+            var first = activeLineSegments[i];
+            var second = activeLineSegments[i - 1];
             var segmentLength = 0f;
             segmentLength = GetSegmentLength(first, second);
             var lengthDifference = lineLength + segmentLength - totalLength;
@@ -139,10 +139,10 @@ public class Snake
                 // We are too long and need to move our tail a bit
                 // We start from the back and see how much to cut off
                 var segmentsToRemove = 0;
-                for (int j = startIndex; j < startIndex + length - 1; j++)
+                for (int j = startIndex; j < startIndex + segmentCount - 1; j++)
                 {
-                    first = lineSegments1[j];
-                    second = lineSegments1[j + 1];
+                    first = activeLineSegments[j];
+                    second = activeLineSegments[j + 1];
                     segmentLength = GetSegmentLength(first, second);
                     if (lengthDifference >= segmentLength)
                     {
@@ -156,22 +156,22 @@ public class Snake
                         {
                             if (first.y > second.y)
                             {
-                                lineSegments1[j] = new Vector3(first.x, first.y - lengthDifference, 0);
+                                activeLineSegments[j] = new Vector3(first.x, first.y - lengthDifference, 0);
                             }
                             else
                             {
-                                lineSegments1[j] = new Vector3(first.x, first.y + lengthDifference, 0);
+                                activeLineSegments[j] = new Vector3(first.x, first.y + lengthDifference, 0);
                             }
                         }
                         else
                         {
                             if (first.x > second.x)
                             {
-                                lineSegments1[j] = new Vector3(first.x - lengthDifference, first.y, 0);
+                                activeLineSegments[j] = new Vector3(first.x - lengthDifference, first.y, 0);
                             }
                             else
                             {
-                                lineSegments1[j] = new Vector3(first.x + lengthDifference, first.y, 0);
+                                activeLineSegments[j] = new Vector3(first.x + lengthDifference, first.y, 0);
                             }
                         }
                         break;
@@ -180,7 +180,7 @@ public class Snake
                 if (segmentsToRemove > 0)
                 {
                     startIndex += segmentsToRemove;
-                    length -= segmentsToRemove;
+                    segmentCount -= segmentsToRemove;
                 }
             }
             else
