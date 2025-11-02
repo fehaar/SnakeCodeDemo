@@ -3,12 +3,12 @@ using UnityEngine;
 /// <summary>
 /// Show the boundaries of the play area
 /// </summary>
-public class BoundariesView : MonoBehaviour
+public class GameAreaView : MonoBehaviour
 {
     private Snake snake;
-    private Boundaries boundaries;
+    private GameArea boundaries;
 
-    public void Initialize(Boundaries boundaries, Snake snake)
+    public void Initialize(GameArea boundaries, Snake snake)
     {
         this.snake = snake;
         this.boundaries = boundaries;

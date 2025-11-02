@@ -17,9 +17,7 @@ public class GameView : MonoBehaviour
 
     [Header("Play area")]
     [SerializeField]
-    private BoundariesView boundariesView;
-    [SerializeField]
-    private Vector2 boundariesStartingSize = new Vector2(150, 100);
+    private GameAreaSettings gameAreaSettings;
 
     [Header("Food")]
     [SerializeField]
@@ -44,10 +42,11 @@ public class GameView : MonoBehaviour
         snakeView = Instantiate(snakePrefab);
         snakeView.Initialize(snake, movement.ToInputAction());
 
-        var boundaries = new Boundaries(new Bounds(Vector3.zero, boundariesStartingSize));
-        boundariesView.Initialize(boundaries, snake);
+        var gameArea = gameAreaSettings.CreateGameArea();
+        var gameAreaView = FindFirstObjectByType<GameAreaView>();
+        gameAreaView.Initialize(gameArea, snake);
 
-        var foodArea = new FoodArea(foodSpawnInterval, maxFood, boundaries);
+        var foodArea = new FoodArea(foodSpawnInterval, maxFood, gameArea);
         foodAreaView.Initialize(foodArea, snake);
 
         scoreView.Initialize(foodArea);

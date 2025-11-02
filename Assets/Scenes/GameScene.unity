@@ -538,7 +538,7 @@ MonoBehaviour:
   snakePrefab: {fileID: 6864808118802527566, guid: b9c087df2eceb9243b2cf6825b2e3732, type: 3}
   snakeSettings: {fileID: 11400000, guid: 1e9e4aaea9590394fb0a831ed613d227, type: 2}
   movement: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  boundariesView: {fileID: 135989106}
+  gameAreaSettings: {fileID: 11400000, guid: 60bdd00ba8e534a46885e748a5a67e6d, type: 2}
   boundariesStartingSize: {x: 150, y: 100}
   foodAreaView: {fileID: 112935524}
   foodSpawnInterval: 3

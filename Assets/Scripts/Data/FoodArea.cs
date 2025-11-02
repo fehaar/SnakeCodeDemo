@@ -5,12 +5,12 @@
 /// </summary>
 public class FoodArea
 {
-    public FoodArea(float spawnInterval, int maxFood, Boundaries boundaries)
+    public FoodArea(float spawnInterval, int maxFood, GameArea gameArea)
     {
         this.spawnInterval = spawnInterval;
         spawnTimeLeft = spawnInterval / 2f;
         this.maxFood = maxFood;
-        this.boundaries = boundaries;
+        this.gameArea = gameArea;
     }
     public int FoodEaten { get; private set; } = 0;
 
@@ -18,7 +18,7 @@ public class FoodArea
 
     private float spawnInterval;
     private int maxFood;
-    private Boundaries boundaries;
+    private GameArea gameArea;
     private List<Food> availableFood = new();
 
     const float DISTANCE_FROM_EDGE = 3f;
@@ -39,8 +39,9 @@ public class FoodArea
     {
         if (availableFood.Count < maxFood && (spawnTimeLeft -= deltaTime) < 0)
         {
+            // Spawn a new piece of food within the game area
             spawnTimeLeft = spawnInterval;
-            var food = new Food(new Vector2(Random.Range(boundaries.Min.x + DISTANCE_FROM_EDGE, boundaries.Max.x - DISTANCE_FROM_EDGE), Random.Range(boundaries.Min.y + DISTANCE_FROM_EDGE, boundaries.Max.y - DISTANCE_FROM_EDGE)));
+            var food = new Food(new Vector2(Random.Range(gameArea.Min.x + DISTANCE_FROM_EDGE, gameArea.Max.x - DISTANCE_FROM_EDGE), Random.Range(gameArea.Min.y + DISTANCE_FROM_EDGE, gameArea.Max.y - DISTANCE_FROM_EDGE)));
             availableFood.Add(food);
             return food;
         }

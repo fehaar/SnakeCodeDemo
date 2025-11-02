@@ -3,9 +3,9 @@
 /// <summary>
 /// The boundaries define the size of the play area and can kill a snake if it goes outside the area
 /// </summary>
-public class Boundaries
+public class GameArea
 {
-    public Boundaries(Bounds bounds)
+    public GameArea(Bounds bounds)
     {
         this.bounds = bounds; 
     }
