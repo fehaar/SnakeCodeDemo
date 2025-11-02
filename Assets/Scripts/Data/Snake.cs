@@ -6,7 +6,7 @@ using UnityEngine;
 /// This is the data representation of a Snake in the game.
 /// The snake only knows of its head and how to move that.
 /// </summary>
-public class Snake
+public class Snake : IDisposable
 {
     public Snake(float snakeStartingSpeed, int snakeStartingLength, float snakeLengthIncrement, float snakeSpeedIncrement)
     {
@@ -213,5 +213,10 @@ public class Snake
     {
         Length += snakeLengthIncrement;
         Speed += snakeSpeedIncrement;
+    }
+
+    public void Dispose()
+    {
+        activeLineSegments.Dispose();
     }
 }

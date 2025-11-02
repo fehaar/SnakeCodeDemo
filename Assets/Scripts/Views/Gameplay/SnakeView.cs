@@ -131,6 +131,7 @@ public class SnakeView : MonoBehaviour
         deathAnimation.startValue = snake.Length;
         await Tween.Custom(deathAnimation, ReduceTailLength);
         Destroy(gameObject);
+        snake.Dispose();
     }
 
     private void Turn(Snake.MoveDirection moveDirection)
