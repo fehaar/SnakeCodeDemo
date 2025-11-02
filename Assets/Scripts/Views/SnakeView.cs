@@ -202,8 +202,9 @@ public class SnakeView : MonoBehaviour
         {
             return;
         }
-        // We will add in a new segment of the line when we turn. It will get positioned next tick.
-        line.positionCount++;        
+        // We will add in a new segment of the line when we turn, and initialize it to the head of the snake.
+        line.positionCount++;
+        line.SetPosition(line.positionCount - 1, new Vector3(snake.Position.x, snake.Position.y, 0));
         snake.Turn(moveDirection);
     }
 
