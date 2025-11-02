@@ -11,9 +11,15 @@ public class ScoreView : MonoBehaviour
 
     private FoodArea foodArea;
 
-    public void Initialize(FoodArea foodArea)
+    public void Initialize(GameData gameData)
     {
-        this.foodArea = foodArea;
+        // If we are replaying, make sure to remove subscription to the old action
+        if (this.foodArea != null)
+        {
+            this.foodArea.FoodEatenChanged -= FoodArea_FoodEatenChanged;
+        }
+
+        this.foodArea = gameData.FoodArea;
         this.foodArea.FoodEatenChanged += FoodArea_FoodEatenChanged;
     }
 

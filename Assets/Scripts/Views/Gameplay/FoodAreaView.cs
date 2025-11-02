@@ -11,10 +11,10 @@ public class FoodAreaView : MonoBehaviour
     private FoodArea foodArea;
     private Snake snake;
 
-    public void Initialize(FoodArea foodArea, Snake snake)
+    public void Initialize(GameData gameData)
     {
-        this.foodArea = foodArea;
-        this.snake = snake;
+        this.foodArea = gameData.FoodArea;
+        this.snake = gameData.Snake;
     }
 
     private void Update()

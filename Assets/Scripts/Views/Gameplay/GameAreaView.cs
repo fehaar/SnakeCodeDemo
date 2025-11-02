@@ -6,20 +6,20 @@ using UnityEngine;
 public class GameAreaView : MonoBehaviour
 {
     private Snake snake;
-    private GameArea boundaries;
+    private GameArea gameArea;
 
-    public void Initialize(GameArea boundaries, Snake snake)
+    public void Initialize(GameData gameData)
     {
-        this.snake = snake;
-        this.boundaries = boundaries;
-        transform.localScale = boundaries.Size;
+        this.snake = gameData.Snake;
+        this.gameArea = gameData.GameArea;
+        transform.localScale = gameArea.Size;
     }
 
     private void Update()
     {
-        if (this.boundaries != null)
+        if (this.gameArea != null)
         {
-            boundaries.KillSnakeOutsideArea(snake);
+            gameArea.KillSnakeOutsideArea(snake);
         }
     }
 }
