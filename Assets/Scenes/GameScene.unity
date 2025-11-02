@@ -664,6 +664,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FoodAreaView
   foodPrefab: {fileID: 5590982007362317920, guid: 78dd55a5de3de9a4da8d6ff3fe7400e1, type: 3}
+  foodDeathAnimation:
+    startFromCurrent: 0
+    startValue: 1
+    endValue: 0
+    settings:
+      duration: 1
+      ease: 23
+      customEase:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      cycles: 1
+      cycleMode: 0
+      startDelay: 0.5
+      endDelay: 0
+      useUnscaledTime: 0
+      _useFixedUpdate: 0
+      _updateType: 0
 --- !u!1 &130317374
 GameObject:
   m_ObjectHideFlags: 0

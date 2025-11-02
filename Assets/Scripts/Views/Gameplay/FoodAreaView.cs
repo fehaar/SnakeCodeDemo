@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using PrimeTween;
 using UnityEngine;
 
 /// <summary>
@@ -7,6 +9,8 @@ public class FoodAreaView : GameDataInitializable
 {
     [SerializeField]
     private FoodView foodPrefab;
+    [SerializeField]
+    private TweenSettings<float> foodDeathAnimation;
 
     private GameData gameData;
     private FoodArea foodArea;
@@ -16,18 +20,29 @@ public class FoodAreaView : GameDataInitializable
     {
         this.gameData = gameData;
         this.gameData.OnGameEnded += OnGameEnded;
+        this.gameData.AddEndGameTaskFactory(EndGameAnimation);
         this.foodArea = gameData.FoodArea;
         this.snake = gameData.Snake;
+    }
+
+    private async UniTask EndGameAnimation()
+    {
+        var foodAnimations = new List<UniTask>();
+        foreach (var leftoverFood in GetComponentsInChildren<FoodView>())
+        {
+            var localSettings = foodDeathAnimation;
+            localSettings.settings.startDelay = Random.Range(0f, localSettings.settings.startDelay);
+            foodAnimations.Add(Tween.Scale(leftoverFood.transform, localSettings)
+                                .OnComplete(target: leftoverFood.gameObject, (target) => Destroy(target))
+                                .ToYieldInstruction()
+                                .ToUniTask());
+        }
+        await UniTask.WhenAll(foodAnimations);
     }
 
     private void OnGameEnded()
     {
         this.gameData.OnGameEnded -= OnGameEnded;
-
-        foreach (var leftoverFood in GetComponentsInChildren<FoodView>())
-        {
-            Destroy(leftoverFood.gameObject);
-        }
     }
 
     private void Update()
