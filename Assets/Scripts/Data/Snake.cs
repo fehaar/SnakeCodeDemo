@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -38,6 +39,8 @@ public class Snake
     public float Length { get; private set; } = 20f;
 
     public bool IsDead { get; private set; } = false;
+
+    public event Action OnDead;
 
     private float snakeLengthIncrement = 20f;
     private float snakeSpeedIncrement = 1f;
@@ -106,6 +109,7 @@ public class Snake
     internal void Kill()
     {
         IsDead = true;
+        OnDead?.Invoke();
     }
 
     internal void Eat(FoodView food)

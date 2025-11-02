@@ -34,6 +34,7 @@ public class GameView : MonoBehaviour
         // Set up the snake
         snakeView = Instantiate(snakePrefab);
         snakeView.Initialize(gameData.Snake, movement.ToInputAction());
+        gameData.Snake.OnDead += Snake_OnDead;
 
         // Initialize all the other parts of the game in way where we do not need explicit references
         foreach (var initializer in FindObjectsByType<GameDataInitializable>(FindObjectsInactive.Include, FindObjectsSortMode.None))
@@ -42,17 +43,11 @@ public class GameView : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void Snake_OnDead()
     {
-        if (gameData == null)
-        {
-            return;
-        }
-        if (gameData.Snake.IsDead)
-        {
-            gameData.EndGame();
-            Destroy(snakeView.gameObject);
-            gameData = null;
-        }
+        gameData.Snake.OnDead -= Snake_OnDead;
+        gameData.EndGame();
+        Destroy(snakeView.gameObject);
+        gameData = null;
     }
 }
