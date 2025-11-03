@@ -65,6 +65,10 @@ public class Snake : IDisposable
 
     public NativeSlice<Vector3> Positions => activeLineSegments.Slice(startIndex, pointCount);
 
+    /// <summary>
+    /// Move the snake and check that it does not hit itself
+    /// </summary>
+    /// <param name="deltaTime"></param>
     internal void Tick(float deltaTime)
     {
         var distance = Speed * deltaTime;
@@ -138,6 +142,10 @@ public class Snake : IDisposable
         activeLineSegments[startIndex + pointCount - 1] = Position;
     }
 
+    /// <summary>
+    /// Cull the length of the tail so it moves with the snake.
+    /// </summary>
+    /// <param name="totalLength"></param>
     internal void AdjustTailLength(float totalLength)
     {
         var lineLength = 0f;

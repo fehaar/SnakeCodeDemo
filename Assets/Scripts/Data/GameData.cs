@@ -20,6 +20,10 @@ public class GameData
 
     private List<Func<UniTask>> endGameTaskFactories = new ();
 
+    /// <summary>
+    /// Views can register methods here that will supply different end game animations that need to be run before we go back to the menu.
+    /// </summary>
+    /// <param name="taskFactory"></param>
     public void AddEndGameTaskFactory(Func<UniTask> taskFactory)
     {
         endGameTaskFactories.Add(taskFactory);
